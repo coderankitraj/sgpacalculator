@@ -4,138 +4,76 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SGPA & CGPA Calculator</title>
-    <link href="https://unpkg.com/tailwindcss@^3/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-      body {
-        background: #f5f5f5;
-      }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-    <div class="w-full max-w-3xl bg-white p-6 rounded-xl shadow-lg">
-      <h1 class="text-3xl font-bold text-center mb-6 text-blue-600">
-        SGPA & CGPA Calculator
-      </h1>
+  <body class="bg-gray-100 text-gray-800">
+    <div class="max-w-2xl mx-auto p-6">
+      <h1 class="text-3xl font-bold mb-4 text-center">SGPA & CGPA Calculator</h1>
 
-      <!-- SGPA Calculator -->
-      <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">SGPA Calculator</h2>
-        <form id="sgpa-form" class="grid gap-4 sm:grid-cols-2">
-          <input type="number" placeholder="Subject 1 Marks" class="input" />
-          <input type="number" placeholder="Subject 2 Marks" class="input" />
-          <input type="number" placeholder="Subject 3 Marks" class="input" />
-          <input type="number" placeholder="Subject 4 Marks" class="input" />
-          <input type="number" placeholder="Subject 5 Marks" class="input" />
-          <input type="number" placeholder="Subject 6 Marks" class="input" />
-          <input type="number" placeholder="Subject 7 Marks" class="input" />
-          <input type="number" placeholder="Subject 8 Marks" class="input" />
-        </form>
-        <button
-          onclick="calculateSGPA()"
-          class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
-          Calculate SGPA
-        </button>
-        <div
-          id="sgpa-result"
-          class="mt-4 text-lg font-semibold text-green-600 text-center"
-        ></div>
-      </div>
+      <section class="mb-10">
+        <h2 class="text-xl font-semibold mb-2">SGPA Calculator</h2>
+        <div id="sgpa-inputs" class="grid grid-cols-1 gap-2 mb-4">
+          <!-- 8 subjects input -->
+          ${[...Array(8)]
+            .map(
+              (_, i) =>
+                `<input type="number" class="border rounded p-2" placeholder="Subject ${i + 1} Marks" />`
+            )
+            .join("")}
+        </div>
+        <button onclick="calculateSGPA()" class="bg-blue-600 text-white px-4 py-2 rounded">Calculate SGPA</button>
+        <p id="sgpa-result" class="mt-3 font-semibold"></p>
+      </section>
 
-      <hr class="my-8" />
+      <hr class="my-6" />
 
-      <!-- CGPA Calculator  -->
-      <div>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">CGPA Calculator</h2>
-        <form id="cgpa-form" class="grid gap-4 sm:grid-cols-2">
-          <input type="number" placeholder="Semester 1 SGPA" class="input" />
-          <input type="number" placeholder="Semester 2 SGPA" class="input" />
-          <input type="number" placeholder="Semester 3 SGPA" class="input" />
-          <input type="number" placeholder="Semester 4 SGPA" class="input" />
-          <input type="number" placeholder="Semester 5 SGPA" class="input" />
-          <input type="number" placeholder="Semester 6 SGPA" class="input" />
-          <input type="number" placeholder="Semester 7 SGPA" class="input" />
-          <input type="number" placeholder="Semester 8 SGPA" class="input" />
-        </form>
-        <button
-          onclick="calculateCGPA()"
-          class="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
-          Calculate CGPA
-        </button>
-        <div
-          id="cgpa-result"
-          class="mt-4 text-lg font-semibold text-purple-600 text-center"
-        ></div>
-      </div>
+      <section>
+        <h2 class="text-xl font-semibold mb-2">CGPA Calculator</h2>
+        <div id="cgpa-inputs" class="grid grid-cols-1 gap-2 mb-4">
+          ${[...Array(8)]
+            .map(
+              (_, i) =>
+                `<input type="number" class="border rounded p-2" placeholder="Semester ${i + 1} SGPA" />`
+            )
+            .join("")}
+        </div>
+        <button onclick="calculateCGPA()" class="bg-green-600 text-white px-4 py-2 rounded">Calculate CGPA</button>
+        <p id="cgpa-result" class="mt-3 font-semibold"></p>
+      </section>
+
+      <footer class="mt-10 text-center text-sm text-gray-500">
+        Made with ❤️ by <a href="https://www.linkedin.com/in/ankitraj01" class="text-blue-500 underline">Ankit Raj</a>
+        |
+        <a href="https://www.instagram.com/ankit._.raj01" class="text-pink-500 underline">Instagram</a>
+      </footer>
     </div>
 
     <script>
-      function getGradePoint(marks) {
-        if (marks >= 90) return 10;
-        if (marks >= 80) return 9;
-        if (marks >= 70) return 8;
-        if (marks >= 60) return 7;
-        if (marks >= 50) return 6;
-        if (marks >= 40) return 5;
-        return 0;
+      function getGradePoint(mark) {
+        if (mark >= 90) return 10;
+        else if (mark >= 80) return 9;
+        else if (mark >= 70) return 8;
+        else if (mark >= 60) return 7;
+        else if (mark >= 50) return 6;
+        else if (mark >= 40) return 5;
+        else return 0;
       }
 
       function calculateSGPA() {
-        const inputs = document.querySelectorAll("#sgpa-form input");
-        let totalPoints = 0;
-        let validSubjects = 0;
-
-        inputs.forEach((input) => {
-          const marks = parseFloat(input.value);
-          if (!isNaN(marks)) {
-            const point = getGradePoint(marks);
-            totalPoints += point;
-            validSubjects++;
-          }
-        });
-
-        const sgpa =
-          validSubjects > 0 ? (totalPoints / validSubjects).toFixed(2) : "0.00";
-
-        document.getElementById("sgpa-result").textContent =
-          "Your SGPA is: " + sgpa;
+        const inputs = document.querySelectorAll("#sgpa-inputs input");
+        const grades = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
+        const total = grades.reduce((sum, mark) => sum + getGradePoint(mark), 0);
+        const sgpa = (total / grades.length).toFixed(2);
+        document.getElementById("sgpa-result").textContent = "Your SGPA: " + sgpa;
       }
 
       function calculateCGPA() {
-        const inputs = document.querySelectorAll("#cgpa-form input");
-        let total = 0;
-        let count = 0;
-
-        inputs.forEach((input) => {
-          const sgpa = parseFloat(input.value);
-          if (!isNaN(sgpa)) {
-            total += sgpa;
-            count++;
-          }
-        });
-
-        const cgpa =
-          count > 0 ? (total / count).toFixed(2) : "0.00";
-
-        document.getElementById("cgpa-result").textContent =
-          "Your CGPA is: " + cgpa;
+        const inputs = document.querySelectorAll("#cgpa-inputs input");
+        const sGPAs = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
+        const total = sGPAs.reduce((sum, g) => sum + g, 0);
+        const cgpa = (total / sGPAs.length).toFixed(2);
+        document.getElementById("cgpa-result").textContent = "Your CGPA: " + cgpa;
       }
     </script>
-
-    <style>
-      .input {
-        padding: 0.5rem;
-        border: 1px solid #cbd5e0;
-        border-radius: 0.375rem;
-        outline: none;
-        transition: border 0.2s ease;
-        width: 100%;
-      }
-
-      .input:focus {
-        border-color: #3182ce;
-      }
-    </style>
   </body>
 </html>
